@@ -60,3 +60,5 @@ Voting on Proposal done -
 Creator voted:  4indkPArUR64aRTHM5BmJGb2Wnwaf4LyPFXVrUd6LLWz7BrvN3CB6BDnz6EbpTDPswDj8r6SRFTTMTLe38GFSrQA
 Second member voted:  2UtPahcCHALJAJwDFvExcSAuHgmToXHLh61fsAMnwopYYibpKy4YgK8rix71tTKeXxXTeA5FKfpU35qzAATzuwDA
 
+Executed Proposal - 
+Transaction executed:  4SQA5cpAVLyXydBooNzM1son3vwiWpKNHrEreN1kzv3CH1CmCutQoXWVXhSvAuW3wTJn6tBiXSwfKTNJyN38unCf

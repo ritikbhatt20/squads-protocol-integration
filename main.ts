@@ -174,6 +174,35 @@ async function voteOnProposal(
   console.log("Second member voted: ", signature2);
 }
 
+async function executeProposal(creator: Keypair, multisigPda: any) {
+  // Fetch the transaction index from the multisig account
+  const multisigInfo = await multisig.accounts.Multisig.fromAccountAddress(
+    connection,
+    multisigPda
+  );
+  const transactionIndex = Number(multisigInfo.transactionIndex);
+
+  // Get the proposal PDA
+  const [proposalPda] = multisig.getProposalPda({
+    multisigPda,
+    transactionIndex: BigInt(transactionIndex),
+  });
+
+  // Execute the proposal
+  const signature = await multisig.rpc.vaultTransactionExecute({
+    connection,
+    feePayer: creator,
+    multisigPda,
+    transactionIndex: BigInt(transactionIndex),
+    member: creator.publicKey,
+    signers: [creator],
+    sendOptions: { skipPreflight: true },
+  });
+
+  await connection.confirmTransaction(signature);
+  console.log("Transaction executed: ", signature);
+}
+
 async function performAllTransactions() {
   try {
     const { creator, secondMember, createKey, multisigPda } =
@@ -182,7 +211,8 @@ async function performAllTransactions() {
     // await airdropSol(creator);
     // await createMultisig(creator, secondMember, createKey, multisigPda);
     // await createTransactionProposal(creator, multisigPda);
-    await voteOnProposal(creator, secondMember, multisigPda);
+    // await voteOnProposal(creator, secondMember, multisigPda);
+    await executeProposal(creator, multisigPda);
   } catch (error) {
     console.error(error);
   }
