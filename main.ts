@@ -14,9 +14,15 @@ const { Permission, Permissions } = multisig.types;
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 async function getKeypairs() {
-    const creator = await getKeypairFromFile("/home/ritikbhatt020/squads_quickstart/keys/creator-CATPWdHpMS4TVvYruxVDiDk1hWahQuDoHbTteQQQg1ok.json");
-    const secondMember = await getKeypairFromFile("/home/ritikbhatt020/squads_quickstart/keys/second-CATZdDMoSoGWfWzSQvyzv3X4DeRscFmjC8yDep35x8yF.json");
-    const createKey = await getKeypairFromFile("/home/ritikbhatt020/squads_quickstart/keys/createkey-CATpXTLWnPm2NyAwNrcBe2ZXQ7CiBqm1qJfeZJds9yvM.json");
+  const creator = await getKeypairFromFile(
+    "/home/ritikbhatt020/squads_quickstart/keys/creator-CATPWdHpMS4TVvYruxVDiDk1hWahQuDoHbTteQQQg1ok.json"
+  );
+  const secondMember = await getKeypairFromFile(
+    "/home/ritikbhatt020/squads_quickstart/keys/second-CATZdDMoSoGWfWzSQvyzv3X4DeRscFmjC8yDep35x8yF.json"
+  );
+  const createKey = await getKeypairFromFile(
+    "/home/ritikbhatt020/squads_quickstart/keys/createkey-CATpXTLWnPm2NyAwNrcBe2ZXQ7CiBqm1qJfeZJds9yvM.json"
+  );
 
   const [multisigPda] = multisig.getMultisigPda({
     createKey: createKey.publicKey,
@@ -34,7 +40,12 @@ async function airdropSol(creator: Keypair) {
   console.log("Airdrop successful: ", airdropSignature);
 }
 
-async function createMultisig(creator: Keypair, secondMember: Keypair, createKey: Keypair, multisigPda: any) {
+async function createMultisig(
+  creator: Keypair,
+  secondMember: Keypair,
+  createKey: Keypair,
+  multisigPda: any
+) {
   const programConfigPda = multisig.getProgramConfigPda({})[0];
   const programConfig =
     await multisig.accounts.ProgramConfig.fromAccountAddress(
@@ -74,7 +85,7 @@ async function createTransactionProposal(creator: Keypair, multisigPda: any) {
     multisigPda,
     index: 0,
   });
-  console.log("multisig pda: ", multisigPda)
+  console.log("multisig pda: ", multisigPda);
   console.log("vault pda: ", vaultPda);
 
   const instruction = SystemProgram.transfer({
@@ -128,13 +139,50 @@ async function createTransactionProposal(creator: Keypair, multisigPda: any) {
   console.log("Transaction proposal created: ", signature2);
 }
 
+async function voteOnProposal(
+  creator: Keypair,
+  secondMember: Keypair,
+  multisigPda: any
+) {
+  // Fetch the transaction index from the multisig account
+  const multisigInfo = await multisig.accounts.Multisig.fromAccountAddress(
+    connection,
+    multisigPda
+  );
+  const transactionIndex = Number(multisigInfo.transactionIndex);
+
+  // Creator votes on the proposal
+  const signature1 = await multisig.rpc.proposalApprove({
+    connection,
+    feePayer: creator,
+    multisigPda,
+    transactionIndex: BigInt(transactionIndex),
+    member: creator,
+  });
+  await connection.confirmTransaction(signature1);
+  console.log("Creator voted: ", signature1);
+
+  // Second member votes on the proposal
+  const signature2 = await multisig.rpc.proposalApprove({
+    connection,
+    feePayer: creator,
+    multisigPda,
+    transactionIndex: BigInt(transactionIndex),
+    member: secondMember,
+  });
+  await connection.confirmTransaction(signature2);
+  console.log("Second member voted: ", signature2);
+}
+
 async function performAllTransactions() {
   try {
-    const { creator, secondMember, createKey, multisigPda } = await getKeypairs();
+    const { creator, secondMember, createKey, multisigPda } =
+      await getKeypairs();
 
     // await airdropSol(creator);
     // await createMultisig(creator, secondMember, createKey, multisigPda);
-    await createTransactionProposal(creator, multisigPda);
+    // await createTransactionProposal(creator, multisigPda);
+    await voteOnProposal(creator, secondMember, multisigPda);
   } catch (error) {
     console.error(error);
   }
