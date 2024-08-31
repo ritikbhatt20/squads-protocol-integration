@@ -55,3 +55,8 @@ newTransactionIndex:  1n
 Transaction created:  4NQhTK6YA8uHRR2UEYNwqEpLZF3BNpobuQYJRyyrFLpDofQMCT2rwX8NMFd8yCbKk7EwX4TCtQPcjJGGNvMmVsxi
 Transaction proposal created:  23v6osMH6MDeXyPUP4z6sKTBpRXvxoHLJWBXaNNewspoYvBFESBynzT5uEcYU1WyVP1H2XSaz9BDbwKn383AyKYf
 }
+
+Voting on Proposal done - 
+Creator voted:  4indkPArUR64aRTHM5BmJGb2Wnwaf4LyPFXVrUd6LLWz7BrvN3CB6BDnz6EbpTDPswDj8r6SRFTTMTLe38GFSrQA
+Second member voted:  2UtPahcCHALJAJwDFvExcSAuHgmToXHLh61fsAMnwopYYibpKy4YgK8rix71tTKeXxXTeA5FKfpU35qzAATzuwDA
+
