@@ -1,0 +1,12 @@
+{
+  "name": "squads_quickstart",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@solana/web3.js": "^1.95.3",
+    "@squads-protocol/multisig": "^2.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
