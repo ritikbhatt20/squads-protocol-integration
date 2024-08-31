@@ -7,20 +7,25 @@ import {
   TransactionMessage,
   clusterApiUrl,
 } from "@solana/web3.js";
+import { getKeypairFromFile } from "@solana-developers/helpers";
 
 const { Permission, Permissions } = multisig.types;
 
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
-const creator = Keypair.generate();
-const secondMember = Keypair.generate();
-const createKey = Keypair.generate();
-const [multisigPda] = multisig.getMultisigPda({
-  createKey: createKey.publicKey,
-});
+async function getKeypairs() {
+    const creator = await getKeypairFromFile("/home/ritikbhatt020/squads_quickstart/keys/creator-CATPWdHpMS4TVvYruxVDiDk1hWahQuDoHbTteQQQg1ok.json");
+    const secondMember = await getKeypairFromFile("/home/ritikbhatt020/squads_quickstart/keys/second-CATZdDMoSoGWfWzSQvyzv3X4DeRscFmjC8yDep35x8yF.json");
+    const createKey = await getKeypairFromFile("/home/ritikbhatt020/squads_quickstart/keys/createkey-CATpXTLWnPm2NyAwNrcBe2ZXQ7CiBqm1qJfeZJds9yvM.json");
 
-async function airdropSol() {
-  // Airdrop SOL to creator
+  const [multisigPda] = multisig.getMultisigPda({
+    createKey: createKey.publicKey,
+  });
+
+  return { creator, secondMember, createKey, multisigPda };
+}
+
+async function airdropSol(creator: Keypair) {
   const airdropSignature = await connection.requestAirdrop(
     creator.publicKey,
     1 * LAMPORTS_PER_SOL
@@ -29,8 +34,7 @@ async function airdropSol() {
   console.log("Airdrop successful: ", airdropSignature);
 }
 
-async function createMultisig() {
-  // Create a new multisig
+async function createMultisig(creator: Keypair, secondMember: Keypair, createKey: Keypair, multisigPda: any) {
   const programConfigPda = multisig.getProgramConfigPda({})[0];
   const programConfig =
     await multisig.accounts.ProgramConfig.fromAccountAddress(
@@ -65,18 +69,20 @@ async function createMultisig() {
   console.log("Multisig created: ", signature);
 }
 
-async function createTransactionProposal() {
-  // Create a transaction proposal
+async function createTransactionProposal(creator: Keypair, multisigPda: any) {
   const [vaultPda] = multisig.getVaultPda({
     multisigPda,
     index: 0,
   });
+  console.log("multisig pda: ", multisigPda)
+  console.log("vault pda: ", vaultPda);
 
   const instruction = SystemProgram.transfer({
     fromPubkey: vaultPda,
     toPubkey: creator.publicKey,
     lamports: 0.1 * LAMPORTS_PER_SOL,
   });
+  console.log("instruction: ", instruction);
 
   const transferMessage = new TransactionMessage({
     payerKey: vaultPda,
@@ -88,9 +94,12 @@ async function createTransactionProposal() {
     connection,
     multisigPda
   );
+  console.log("multi sig info: ", multisigInfo);
 
   const currentTransactionIndex = Number(multisigInfo.transactionIndex);
   const newTransactionIndex = BigInt(currentTransactionIndex + 1);
+  console.log("currentTransactionIndex: ", currentTransactionIndex);
+  console.log("newTransactionIndex: ", newTransactionIndex);
 
   const signature1 = await multisig.rpc.vaultTransactionCreate({
     connection,
@@ -121,9 +130,11 @@ async function createTransactionProposal() {
 
 async function performAllTransactions() {
   try {
-    await airdropSol();
-    // await createMultisig();
-    // await createTransactionProposal();
+    const { creator, secondMember, createKey, multisigPda } = await getKeypairs();
+
+    // await airdropSol(creator);
+    // await createMultisig(creator, secondMember, createKey, multisigPda);
+    await createTransactionProposal(creator, multisigPda);
   } catch (error) {
     console.error(error);
   }

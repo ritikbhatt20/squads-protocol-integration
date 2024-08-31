@@ -1,0 +1,57 @@
+multi-sig created - 4wi1Vc49zTdW6XaSnUwfcSfqU8Jewip2RbiAMHHe7TEC5XL9DGtjhyKxPJ9fKDDJYAsTdtoNtN5dUBGsQ2Bjxgne
+
+
+transaction proposal created - {
+multisig pda:  PublicKey [PublicKey(2BcSrdA2yNBFjRjzXoZBfps8VETb4HxC8tMykrL6tfTC)] {
+  _bn: <BN: 119392ddaa998a29492748ef72325cd49e208ad49437fd2e20c424c10005352f>
+}
+vault pda:  PublicKey [PublicKey(DZMk1kqc2j2L2J4i289KbVj4o2KUDX1XvrjSx2X2wVUJ)] {
+  _bn: <BN: ba964817caa7225a8f203acf02f1c3e961a77df7c3459b023d28da431ee5c11f>
+}
+instruction:  TransactionInstruction {
+  keys: [
+    {
+      pubkey: [PublicKey [PublicKey(DZMk1kqc2j2L2J4i289KbVj4o2KUDX1XvrjSx2X2wVUJ)]],
+      isSigner: true,
+      isWritable: true
+    },
+    {
+      pubkey: [PublicKey [PublicKey(CATPWdHpMS4TVvYruxVDiDk1hWahQuDoHbTteQQQg1ok)]],
+      isSigner: false,
+      isWritable: true
+    }
+  ],
+  programId: PublicKey [PublicKey(11111111111111111111111111111111)] {
+    _bn: <BN: 0>
+  },
+  data: <Buffer 02 00 00 00 00 e1 f5 05 00 00 00 00>
+}
+multi sig info:  _Multisig {
+  createKey: PublicKey [PublicKey(CATpXTLWnPm2NyAwNrcBe2ZXQ7CiBqm1qJfeZJds9yvM)] {
+    _bn: <BN: a5dd1bb702dff1d60d5e69949f4a546c2f11d6df35472ca27ef96ef1ef223416>
+  },
+  configAuthority: PublicKey [PublicKey(11111111111111111111111111111111)] {
+    _bn: <BN: 0>
+  },
+  threshold: 2,
+  timeLock: 0,
+  transactionIndex: <BN: 0>,
+  staleTransactionIndex: <BN: 0>,
+  rentCollector: null,
+  bump: 255,
+  members: [
+    {
+      key: [PublicKey [PublicKey(CATPWdHpMS4TVvYruxVDiDk1hWahQuDoHbTteQQQg1ok)]],
+      permissions: [Object]
+    },
+    {
+      key: [PublicKey [PublicKey(CATZdDMoSoGWfWzSQvyzv3X4DeRscFmjC8yDep35x8yF)]],
+      permissions: [Object]
+    }
+  ]
+}
+currentTransactionIndex:  0
+newTransactionIndex:  1n
+Transaction created:  4NQhTK6YA8uHRR2UEYNwqEpLZF3BNpobuQYJRyyrFLpDofQMCT2rwX8NMFd8yCbKk7EwX4TCtQPcjJGGNvMmVsxi
+Transaction proposal created:  23v6osMH6MDeXyPUP4z6sKTBpRXvxoHLJWBXaNNewspoYvBFESBynzT5uEcYU1WyVP1H2XSaz9BDbwKn383AyKYf
+}
